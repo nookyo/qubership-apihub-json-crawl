@@ -1,0 +1,13 @@
+name: Template Echo
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Run echo
+        run: echo Hello

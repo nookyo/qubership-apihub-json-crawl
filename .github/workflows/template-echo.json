@@ -1,0 +1,5 @@
+{
+  "name": "Template Workflow",
+  "description": "Workflow template.",
+  "categories": ["Continuous integration", "JavaScript", "npm", "React"]
+}
