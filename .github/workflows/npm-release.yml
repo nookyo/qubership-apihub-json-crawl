@@ -25,6 +25,7 @@ on:
         description: "NPM dist-tag"
         required: false
 
+# Remake it into a normal action game with version calc, bump and all the crap
 jobs:
   release:
     uses:  nookyo/workflow-hub/.github/workflows/npm-publish.yml@main
