@@ -20,7 +20,7 @@ on:
         default: false
         description: "Update dependencies"
         required: false
-       dist-tag:
+      dist-tag:
         default: "next"
         description: "NPM dist-tag"
         required: false
