@@ -35,4 +35,4 @@ jobs:
       registry-url: ${{ inputs.registry-url }}
       update-nc-dependency: ${{ inputs.update-nc-dependency }}
       dist-tag: ${{ inputs.dist-tag }}
-      branch_name: ${{ github.ref_name }}
+      branch_name: ${{ inputs.branch }}
