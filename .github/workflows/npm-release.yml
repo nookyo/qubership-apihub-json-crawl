@@ -20,12 +20,17 @@ on:
         default: false
         description: "Update dependencies"
         required: false
+       dist-tag:
+        default: "next"
+        description: "NPM dist-tag"
+        required: false
 
 jobs:
   publish:
     uses:  nookyo/workflow-hub/.github/workflows/npm-publish.yml@main
     with:
-      version: ${{ github.event.inputs.version }}
-      node-version: ${{ github.event.inputs.node-version }}
-      registry-url: ${{ github.event.inputs.registry-url }}
-      update-nc-dependency: ${{ github.event.inputs.update-nc-dependency }}
+      version: ${{ inputs.version }}
+      node-version: ${{ inputs.node-version }}
+      registry-url: ${{ inputs.registry-url }}
+      update-nc-dependency: ${{ inputs.update-nc-dependency }}
+      dist-tag: ${{ inputs.dist-tag }}
