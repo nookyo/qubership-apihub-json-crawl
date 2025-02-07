@@ -49,17 +49,23 @@ async function runCommand(command, args) {
 
 
 async function detectLerna() {
+    // return fs.access('lerna.json') ? true : false;
     let isLerna = false;
     if(fs.existsSync('lerna.json')) {
-        isLerna = true;
         core.warning('Detected Lerna project');
+        return true;
     }
-    return isLerna;
+    return false;
 }
 
 async function projectBuild() {
     core.warning('Building project');
-    await runCommand('npm', ['run', 'build']);
+    await runCommand('npm', ['run', 'build', '--if-present']);
+}
+
+async function projectTest() {
+    core.warning('Testing project');
+    await runCommand('npm', ['run', 'test', '--if-present']);
 }
 
 async function installDependency() {
@@ -76,6 +82,7 @@ async function run() {
     await installDependency();
     await detectLerna();
     await projectBuild();
+    await projectTest();
 }
 
 run();
