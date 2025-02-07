@@ -1,10 +1,12 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 const core = require('@actions/core');
-// const { version } = require('os');
+const exec = require('@actions/exec');
 
 
 // filePatch = './.github/npm-template.yml';
+
+const defaultPath = './actions/npm-template.yml';
 
 let configDefault = {
     version: '2.0.0',
@@ -37,7 +39,10 @@ async function loadConfig(filePatch) {
 async function run() {
 
     // let filePatch = core.getInput('filePatch');
-    let result = await loadConfig('./actions/npm-template.yml');
+    const filePath =  core.getInput('filePath') || defaultPath;
+
+    let result = await loadConfig(filePath);
+
     core.info(`Config: ${JSON.stringify(result)}`);
 }
 
