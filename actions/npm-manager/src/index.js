@@ -7,7 +7,7 @@ const core = require('@actions/core');
 // filePatch = './.github/npm-template.yml';
 
 let configDefault = {
-    version: 'latest',
+    version: '2.0.0',
 }
 
 
@@ -19,6 +19,7 @@ async function loadConfig(filePatch) {
         try {
             const fileConfig = yaml.load(fs.readFileSync(filePatch, 'utf8'));
             config = { ...config, ...fileConfig };
+            core.info(`Config: ${JSON.stringify(fileConfig)}`);
             core.info(`Config: ${JSON.stringify(config)}`);
 
         } catch (error) {
