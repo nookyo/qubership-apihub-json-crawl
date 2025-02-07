@@ -64,7 +64,7 @@ async function run() {
     core.info(`Config: ${JSON.stringify(result)}`);
 
     await installDependency();
-    await projectBuild();
+    // await projectBuild();
 }
 
 run();
