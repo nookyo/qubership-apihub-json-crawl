@@ -33,11 +33,11 @@ async function runCommand(command, args) {
         env: {
             ...process.env,
             NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN,
-        },
-        listeners: {
-            stdout: (data) => process.stdout.write(data.toString()),
-            stderr: (data) => process.stderr.write(data.toString()),
-        },
+        }
+        // listeners: {
+        //     stdout: (data) => process.stdout.write(data.toString()),
+        //     stderr: (data) => process.stderr.write(data.toString()),
+        // },
     };
     try {
         await exec.exec(command, args, options);
