@@ -34,16 +34,40 @@ async function loadConfig(filePatch) {
     return config;
 }
 
+async function projectBuild(){
+    const options = {
+        listeners: {
+          stdout: (data) => {
+            process.stdout.write(data.toString());
+          },
+          stderr: (data) => {
+            process.stderr.write(data.toString());
+          }
+        }
+      };
+
+      try {
+        await exec.exec('npm', ['run', 'build'], options);
+      }
+      catch(error){
+        core.error(`Error building project: ${error}`);
+      }
+}
+
 
 
 async function run() {
 
-    // let filePatch = core.getInput('filePatch');
-    const filePath =  core.getInput('filePath') || defaultPath;
+
+    let filePath =  core.getInput('filePath') || defaultPath;
 
     let result = await loadConfig(filePath);
 
     core.info(`Config: ${JSON.stringify(result)}`);
+
+    await projectBuild();
+
+
 }
 
 run();
