@@ -34,7 +34,7 @@ async function loadConfig(filePatch) {
     return config;
 }
 
-async function projectBuild(){
+async function runCommand(command, arg){
     const options = {
         listeners: {
           stdout: (data) => {
@@ -45,9 +45,8 @@ async function projectBuild(){
           }
         }
       };
-
       try {
-        await exec.exec('npm', ['run', 'build'], options);
+        await exec.exec(command,arg, options);
       }
       catch(error){
         core.error(`Error building project: ${error}`);
@@ -55,6 +54,16 @@ async function projectBuild(){
 }
 
 
+async function projectBuild(){
+
+    runCommand('npm', ['run', 'build']);
+}
+
+async function installDependency(){
+
+    runCommand('npm', ['ci']);
+
+}
 
 async function run() {
 
@@ -65,7 +74,9 @@ async function run() {
 
     core.info(`Config: ${JSON.stringify(result)}`);
 
+    await installDependency();
     await projectBuild();
+
 
 
 }
