@@ -55,14 +55,11 @@ async function runCommand(command, arg){
 
 
 async function projectBuild(){
-
     runCommand('npm', ['run', 'build']);
 }
 
 async function installDependency(){
-
-    runCommand('npm', ['ci']);
-
+    runCommand('npm', ['ci', '--legacy-peer-deps']);
 }
 
 async function run() {
