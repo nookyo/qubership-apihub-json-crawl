@@ -19,6 +19,8 @@ async function loadConfig(filePatch) {
         try {
             const fileConfig = yaml.load(fs.readFileSync(filePatch, 'utf8'));
             config = { ...config, ...fileConfig };
+            core.info(`Config: ${JSON.stringify(config)}`);
+
         } catch (error) {
             core.error(`Error loading config file: ${error}`);
         }

@@ -7,31 +7,17 @@ on:
         default: "1.0.1"
         description: "New version (e.g., 1.0.1)"
         required: true
-      node-version:
-        default: "20"
-        description: "Node.js version (e.g., 20)"
-        required: true
-      registry-url:
-        default: "https://npm.pkg.github.com"
-        description: "NPM registry URL"
-        required: false
-      update-nc-dependency:
-        type: boolean
-        default: false
-        description: "Update dependencies"
-        required: false
-      dist-tag:
-        default: "next"
-        description: "NPM dist-tag"
-        required: false
-
 # Remake it into a normal action game with version calc, bump and all the crap
 jobs:
   release:
-    uses:  nookyo/workflow-hub/.github/workflows/npm-publish.yml@main
-    with:
-      version: ${{ inputs.version }}
-      node-version: ${{ inputs.node-version }}
-      registry-url: ${{ inputs.registry-url }}
-      update-nc-dependency: ${{ inputs.update-nc-dependency }}
-      dist-tag: ${{ inputs.dist-tag }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: My action use
+        uses: ./actions/npm-manager
+        with:
+          version: ${{ github.event.inputs.version }}
+
+

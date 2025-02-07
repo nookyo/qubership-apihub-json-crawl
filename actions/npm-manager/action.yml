@@ -4,22 +4,7 @@ inputs:
   version:
     description: 'New version (e.g., 1.0.1)'
     required: true
-  node-version:
-    description: 'Node.js version (e.g., 20)'
-    required: true
-    default: '20'
-  registry-url:
-    description: 'NPM registry URL'
-    required: false
-    default: 'https://npm.pkg.github.com'
-  update-nc-dependency:
-    description: 'Update dependencies'
-    required: false
-    default: "false"
-  dist-tag:
-    description: 'NPM dist-tag'
-    required: false
-    default: 'next'
+
 runs:
   using: 'node20'
   main: 'index.js'
