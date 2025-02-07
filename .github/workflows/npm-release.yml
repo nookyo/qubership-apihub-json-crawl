@@ -17,7 +17,5 @@ jobs:
 
       - name: My action use
         uses: ./actions/npm-manager
-        with:
-          version: ${{ github.event.inputs.version }}
 
 
