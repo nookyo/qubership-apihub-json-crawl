@@ -1,3 +1,6 @@
 version: "3.0.0"
 debug: true
-release: stable
+tag: latest
+hooks:
+  preDeploy: "echo 'Running pre-deploy hook'"
+  postDeploy: "echo 'Running post-deploy hook'"

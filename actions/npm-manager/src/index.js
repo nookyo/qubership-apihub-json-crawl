@@ -2,11 +2,14 @@ const fs = require('fs');
 const yaml = require('js-yaml');
 const core = require('@actions/core');
 const exec = require('@actions/exec');
+const execSync = require('child_process').execSync;
 
 const defaultPath = './actions/npm-template.yml';
 
 let configDefault = {
     version: '2.0.0',
+    runTests: false,
+    tag: 'latest',
 };
 
 async function loadConfig(filePath) {
@@ -28,16 +31,25 @@ async function loadConfig(filePath) {
     return config;
 }
 
+async function updateDependency() {
+    core.warning('Updating dependencies');
+    let dependency = execSync('npm ls --json');
+
+}
+
+async function runHook(hookName, hooks) {
+    if (hooks && hooks[hookName]) {
+        core.info(`Запуск хука ${hookName}: ${hooks[hookName]}`);
+        await runCommand("sh", ["-c", hooks[hookName]]);
+    }
+}
+
 async function runCommand(command, args) {
     const options = {
         env: {
             ...process.env,
             NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN,
         },
-        // listeners: {
-        //     stdout: (data) => process.stdout.write(data.toString()),
-        //     stderr: (data) => process.stderr.write(data.toString()),
-        // },
     };
     try {
         await exec.exec(command, args, options);
@@ -48,23 +60,67 @@ async function runCommand(command, args) {
 }
 
 
+async function publishPackages(isLerna, tagName) {
+    core.warning('Publishing packages');
+
+    const tagName = process.env.TAG_NAME || 'latest';
+
+    if (isLerna) {
+        await runCommand('npx', [
+            'lerna',
+            'publish',
+            'from-package',
+            '--yes',
+            '--no-push',
+            '--no-git-reset',
+            '--no-git-tag-version',
+            '--dist-tag', tagName
+        ]);
+    }
+
+    await runCommand('npm', ['publish', '--tag', tagName]);
+    return;
+
+}
+
+async function changeVersion(version, isLerna) {
+    core.warning('Changing version');
+    if(isLerna){
+        const args = [
+            'lerna',
+            'version',
+            version,
+            '--yes',
+            '--no-git-tag-version',
+            '--no-push'
+        ];
+        await runCommand('npx', args);
+    }
+    else{
+        await runCommand('npm', ['version', version, '--no-git-tag-version']);
+    }
+}
+
+
+
 async function detectLerna() {
-    let isLerna = false;
-    if(fs.existsSync('lerna.json')) {
+    if (fs.existsSync('lerna.json')) {
         core.warning('Detected Lerna project');
         return true;
     }
     return false;
 }
 
-async function projectBuild() {
+async function buildPackages() {
     core.warning('Building project');
     await runCommand('npm', ['run', 'build', '--if-present']);
 }
 
-async function projectTest() {
-    core.warning('Testing project');
-    await runCommand('npm', ['run', 'test', '--if-present']);
+async function projectTest(runTests) {
+    if (runTests) {
+        core.warning('Testing project');
+        await runCommand('npm', ['run', 'test', '--if-present']);
+    }
 }
 
 async function installDependency() {
@@ -73,15 +129,28 @@ async function installDependency() {
 }
 
 async function run() {
+
     let filePath = core.getInput('filePath') || defaultPath;
     let result = await loadConfig(filePath);
 
+    let runTests = core.getInput('runTests') || result.runTests;
+    let version = core.getInput('version') || result.version;
+    let tag = core.getInput('tag') || result.tag;
+
+
     core.info(`Config: ${JSON.stringify(result)}`);
 
+    let isLerna = await detectLerna();
+
     await installDependency();
-    await detectLerna();
-    await projectBuild();
-    await projectTest();
+
+    await changeVersion(version, isLerna);
+
+    await buildPackages();
+
+    await projectTest(runTests);
+
+    await publishPackages(isLerna, tag);
 }
 
 run();
