@@ -48,12 +48,12 @@ async function runCommand(command, args) {
 }
 
 async function projectBuild() {
-    core.info('Building project');
+    core.warning('Building project');
     await runCommand('npm', ['run', 'build']);
 }
 
 async function installDependency() {
-    core.info('Installing dependencies');
+    core.warning('Installing dependencies');
     await runCommand('npm', ['ci', '--legacy-peer-deps']);
 }
 
@@ -64,7 +64,7 @@ async function run() {
     core.info(`Config: ${JSON.stringify(result)}`);
 
     await installDependency();
-    // await projectBuild();
+    await projectBuild();
 }
 
 run();
