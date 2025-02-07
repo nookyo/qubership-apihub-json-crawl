@@ -37,7 +37,7 @@ async function loadConfig(filePatch) {
 async function run() {
 
     // let filePatch = core.getInput('filePatch');
-    let result = await loadConfig('./.github/npm-template.yml');
+    let result = await loadConfig('./action/npm-template.yml');
     core.info(`Config: ${JSON.stringify(result)}`);
 }
 
