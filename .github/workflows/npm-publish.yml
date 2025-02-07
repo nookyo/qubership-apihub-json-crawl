@@ -104,18 +104,18 @@ jobs:
         with:
           branch_name: 'main'
 
-      - name: Configure npm authentication
-        run: |
-          echo "@nookyo:registry=https://npm.pkg.github.com/" > ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+      # - name: Configure npm authentication
+      #   run: |
+      #     echo "@nookyo:registry=https://npm.pkg.github.com/" > ~/.npmrc
+      #     echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
 
-      - name: Publish Package
-        run: |
-          npm config get registry
-          if [ "$IS_LERNA" = "true" ]; then
-            echo "Publishing with Lerna..."
-            npx lerna publish from-package --yes --no-push --no-git-reset --no-git-tag-version --dist-tag ${{ github.event.inputs.dist-tag }}
-          else
-            echo "Publishing with npm..."
-            npm publish --tag ${{ github.event.inputs.dist-tag }}
-          fi
+      # - name: Publish Package
+      #   run: |
+      #     npm config get registry
+      #     if [ "$IS_LERNA" = "true" ]; then
+      #       echo "Publishing with Lerna..."
+      #       npx lerna publish from-package --yes --no-push --no-git-reset --no-git-tag-version --dist-tag ${{ github.event.inputs.dist-tag }}
+      #     else
+      #       echo "Publishing with npm..."
+      #       npm publish --tag ${{ github.event.inputs.dist-tag }}
+      #     fi
