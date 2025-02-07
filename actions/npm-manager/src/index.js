@@ -33,7 +33,7 @@ async function runCommand(command, args) {
         env: {
             ...process.env,
             NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN,
-        }
+        },
         // listeners: {
         //     stdout: (data) => process.stdout.write(data.toString()),
         //     stderr: (data) => process.stderr.write(data.toString()),
@@ -49,7 +49,6 @@ async function runCommand(command, args) {
 
 
 async function detectLerna() {
-    // return fs.access('lerna.json') ? true : false;
     let isLerna = false;
     if(fs.existsSync('lerna.json')) {
         core.warning('Detected Lerna project');
