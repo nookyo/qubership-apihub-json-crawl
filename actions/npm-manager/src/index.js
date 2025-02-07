@@ -47,6 +47,16 @@ async function runCommand(command, args) {
     }
 }
 
+
+async function detectLerna() {
+    let isLerna = false;
+    if(fs.existsSync('lerna.json')) {
+        isLerna = true;
+        core.warning('Detected Lerna project');
+    }
+    return isLerna;
+}
+
 async function projectBuild() {
     core.warning('Building project');
     await runCommand('npm', ['run', 'build']);
@@ -64,6 +74,7 @@ async function run() {
     core.info(`Config: ${JSON.stringify(result)}`);
 
     await installDependency();
+    await detectLerna();
     await projectBuild();
 }
 
