@@ -34,38 +34,42 @@ async function loadConfig(filePatch) {
     return config;
 }
 
-async function runCommand(command, arg){
+async function runCommand(command, args) {
     const options = {
+        env: {
+            ...process.env,
+            // Pass NODE_AUTH_TOKEN to npm (using NODE_AUTH_TOKEN or falling back to GITHUB_TOKEN)
+            NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN,
+        },
         listeners: {
-          stdout: (data) => {
-            process.stdout.write(data.toString());
-          },
-          stderr: (data) => {
-            process.stderr.write(data.toString());
-          }
+            stdout: (data) => {
+                process.stdout.write(data.toString());
+            },
+            stderr: (data) => {
+                process.stderr.write(data.toString());
+            }
         }
-      };
-      try {
-        await exec.exec(command,arg, options);
-      }
-      catch(error){
-        core.error(`Error building project: ${error}`);
-      }
+    };
+    try {
+        await exec.exec(command, args, options);
+    } catch (error) {
+        core.error(`Error executing command: ${error}`);
+        process.exit(1);
+    }
 }
 
-
-async function projectBuild(){
+async function projectBuild() {
     runCommand('npm', ['run', 'build']);
 }
 
-async function installDependency(){
+async function installDependency() {
     runCommand('npm', ['ci', '--legacy-peer-deps']);
 }
 
 async function run() {
 
 
-    let filePath =  core.getInput('filePath') || defaultPath;
+    let filePath = core.getInput('filePath') || defaultPath;
 
     let result = await loadConfig(filePath);
 
