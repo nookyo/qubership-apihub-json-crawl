@@ -19,6 +19,7 @@ async function loadConfig(filePatch) {
         try {
             const fileConfig = yaml.load(fs.readFileSync(filePatch, 'utf8'));
             config = { ...config, ...fileConfig };
+
             core.info(`Config: ${JSON.stringify(fileConfig)}`);
             core.info(`Config: ${JSON.stringify(config)}`);
 
@@ -35,8 +36,8 @@ async function loadConfig(filePatch) {
 
 async function run() {
 
-    let filePatch = core.getInput('filePatch');
-    let result = await loadConfig(filePatch);
+    // let filePatch = core.getInput('filePatch');
+    let result = await loadConfig('./.github/npm-template.yml');
     core.info(`Config: ${JSON.stringify(result)}`);
 }
 
