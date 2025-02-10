@@ -46,7 +46,7 @@ jobs:
         with:
           node-version: ${{ github.event.inputs.node-version }}
           registry-url: ${{ github.event.inputs.registry-url }}
-          scope: '@nookyo'
+          scope: '@nookyo/qubership-apihub-json-crawl'
 
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
