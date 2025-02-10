@@ -194,7 +194,7 @@ async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit cha
 
         core.info(`Git config set: user.name=${userName}, user.email=${userEmail}`);
 
-        await runCommand('git', ['rm', '-r', '--cached node_modules']);
+        await runCommand('git', ['rm', '-r', '--cached', 'node_modules']);
 
         await runCommand('git', ['add', '.']);
         // await runCommand('git', ['reset', 'node_modules']);
