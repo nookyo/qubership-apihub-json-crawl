@@ -244,7 +244,7 @@ async function run() {
 
     await changeVersion(version, isLerna);
 
-    await buildPackages();
+    await buildPackages(config);
 
     await projectTest(runTests);
 
