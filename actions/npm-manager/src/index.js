@@ -105,40 +105,6 @@ async function getNewVersion(version, releaseType) {
     }
 }
 
-async function getNewVersion(version, releaseType) {
-
-    if (!version || version.trim() === '') {
-        try {
-            const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
-            const currentVersion = packageJson.version;
-
-            if (!validateVersion(currentVersion)) {
-                core.setFailed(`Version cant validate. Current value: ${currentVersion}`)
-                throw new Error(`Version cant validate. Current value: ${currentVersion}`)
-            }
-
-            core.warning('Version not set. Try to auto increment version');
-            const newVersion = semver.inc(currentVersion, releaseType);
-            return newVersion;
-        }
-        catch (error) {
-            core.error(`Error read ./package.json  ${error}`);
-            throw error;
-        }
-    }
-    else {
-        if (!validateVersion(version)) {
-            core.setFailed(`Version cant validate. Current value: ${version}`)
-            throw new Error(`Version cant validate. Current value: ${version}`)
-        }
-        core.warning(`Use provided version ${version}`)
-        return version;
-    }
-}
-
-
-
-
 
 // async function publishPackages(isLerna, tagName) {
 //     core.warning('Publishing packages');
@@ -165,8 +131,7 @@ async function getNewVersion(version, releaseType) {
 
 
 async function publishPackages2(isLerna, config, tag) {
-    core.info('Publishing packages');
-
+    core.warning('Publishing packages');
     let command, args;
     //const tag = core.getInput('tag') || config.tag || 'latest';
 
@@ -199,7 +164,6 @@ async function publishPackages2(isLerna, config, tag) {
 async function changeVersion(version, isLerna) {
     core.warning('Changing version');
 
-
     if (isLerna) {
         const args = [
             'lerna',
@@ -217,6 +181,33 @@ async function changeVersion(version, isLerna) {
 }
 
 
+async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit changes') {
+    core.warning('Commit and Push to origin HEAD')
+    try {
+
+        const userName = config?.user?.name || 'qubership-action[bot]';
+        const userEmail = config?.user?.email || 'qubership-action[bot]@qubership.com';
+
+        // Настраиваем git для использования указанных имени и email.
+        await runCommand('git', ['config', 'user.name', userName]);
+        await runCommand('git', ['config', 'user.email', userEmail]);
+
+        core.info(`Git config set: user.name=${userName}, user.email=${userEmail}`);
+
+        await runCommand('git', ['add', '.']);
+        await runCommand('git', ['commit', '-m', commitMessage]);
+        await runCommand('git', ['push', 'origin', 'HEAD']);
+
+    } catch (error) {
+
+        if (error.message.includes('nothing to commit')) {
+            core.info('Nothing to commit.');
+        } else {
+            core.error('Error with commit and push action: ' + error);
+            throw error;
+        }
+    }
+}
 
 async function detectLerna() {
     if (fs.existsSync('lerna.json')) {
@@ -252,6 +243,10 @@ async function projectTest(runTests) {
     }
 }
 
+
+
+
+
 async function run() {
     try {
         let filePath = core.getInput('filePath') || defaultPath;
@@ -280,6 +275,8 @@ async function run() {
         await buildPackages(config);
 
         await projectTest(runTests);
+
+        await commitAndPush(config);
 
         await publishPackages2(isLerna, config, tag);
     }
