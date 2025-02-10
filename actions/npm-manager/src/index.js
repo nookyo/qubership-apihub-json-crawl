@@ -138,6 +138,7 @@ async function publishPackages2(isLerna, config, tag) {
     if (config.publish?.command && config.publish?.args) {
         command = config.publish.command;
         args = config.publish.args.map(arg => (arg === '${tag}' ? tag : arg));
+
     } else if (isLerna) {
         command = 'npx';
         args = [
@@ -195,6 +196,7 @@ async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit cha
         core.info(`Git config set: user.name=${userName}, user.email=${userEmail}`);
 
         await runCommand('git', ['add', '.']);
+        await runCommand('git', ['reset', 'node_modules']);
         await runCommand('git', ['commit', '-m', commitMessage]);
         await runCommand('git', ['push', 'origin', 'HEAD']);
 
