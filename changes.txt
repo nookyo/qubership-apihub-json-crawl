@@ -413,3 +413,89 @@ index aaeafe0..165fb26 100644
    "description": "Async and sync crawler for json object",
    "module": "./dist/index.es.js",
    "main": "./dist/index.cjs.js",
+diff --git a/node_modules/.package-lock.json b/node_modules/.package-lock.json
+index 641ea85..01e2560 100644
+--- a/node_modules/.package-lock.json
++++ b/node_modules/.package-lock.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.2",
++  "version": "1.0.10",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+diff --git a/package-lock.json b/package-lock.json
+index 05af247..59964ac 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.10",
++  "version": "1.0.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "@nookyo/qubership-apihub-json-crawl",
+-      "version": "1.0.10",
++      "version": "1.0.1",
+       "license": "Apache-2.0",
+       "devDependencies": {
+         "@netcracker/qubership-apihub-npm-gitflow": "2.2.2",
+diff --git a/package.json b/package.json
+index 165fb26..7891202 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.10",
++  "version": "1.0.1",
+   "description": "Async and sync crawler for json object",
+   "module": "./dist/index.es.js",
+   "main": "./dist/index.cjs.js",
+diff --git a/node_modules/.package-lock.json b/node_modules/.package-lock.json
+index 01e2560..05809ae 100644
+--- a/node_modules/.package-lock.json
++++ b/node_modules/.package-lock.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.10",
++  "version": "1.0.1",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+diff --git a/package-lock.json b/package-lock.json
+index 59964ac..6390c6f 100644
+--- a/package-lock.json
++++ b/package-lock.json
+@@ -1,12 +1,12 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.1",
++  "version": "1.0.0",
+   "lockfileVersion": 3,
+   "requires": true,
+   "packages": {
+     "": {
+       "name": "@nookyo/qubership-apihub-json-crawl",
+-      "version": "1.0.1",
++      "version": "1.0.0",
+       "license": "Apache-2.0",
+       "devDependencies": {
+         "@netcracker/qubership-apihub-npm-gitflow": "2.2.2",
+diff --git a/package.json b/package.json
+index 7891202..ada52ba 100644
+--- a/package.json
++++ b/package.json
+@@ -1,6 +1,6 @@
+ {
+   "name": "@nookyo/qubership-apihub-json-crawl",
+-  "version": "1.0.1",
++  "version": "1.0.0",
+   "description": "Async and sync crawler for json object",
+   "module": "./dist/index.es.js",
+   "main": "./dist/index.cjs.js",
