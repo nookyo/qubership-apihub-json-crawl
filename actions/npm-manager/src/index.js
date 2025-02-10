@@ -203,7 +203,8 @@ async function installDependency() {
 
 async function buildPackages(config) {
     core.info('Building project');
-    if (config.build && config.build.command && config.build.args) {
+    core.info(`Show config: ${config}`)
+    if (config.build?.command && config.build?.args) {
         await runCommand(config.build.command, config.build.args);
     } else {
         await runCommand('npm', ['run', 'build', '--if-present']);
