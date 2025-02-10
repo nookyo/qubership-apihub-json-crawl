@@ -139,27 +139,27 @@ async function publishPackages2(isLerna, config, tag) {
     //const tag = core.getInput('tag') || config.tag || 'latest';
 
     if (config.publish?.command && config.publish?.args) {
-      command = config.publish.command;
-      args = config.publish.args.map(arg => (arg === '${tag}' ? tag : arg));
+        command = config.publish.command;
+        args = config.publish.args.map(arg => (arg === '${tag}' ? tag : arg));
     } else if (isLerna) {
-      command = 'npx';
-      args = [
-        'lerna',
-        'publish',
-        'from-package',
-        '--yes',
-        '--no-push',
-        '--no-git-reset',
-        '--no-git-tag-version',
-        '--dist-tag', tag
-      ];
+        command = 'npx';
+        args = [
+            'lerna',
+            'publish',
+            'from-package',
+            '--yes',
+            '--no-push',
+            '--no-git-reset',
+            '--no-git-tag-version',
+            '--dist-tag', tag
+        ];
     } else {
-      command = 'npm';
-      args = ['publish', '--tag', tag];
+        command = 'npm';
+        args = ['publish', '--tag', tag];
     }
 
     await runCommand(command, args);
-  }
+}
 
 
 
@@ -220,35 +220,39 @@ async function projectTest(runTests) {
 }
 
 async function run() {
+    try {
+        let filePath = core.getInput('filePath') || defaultPath;
+        let config = await loadConfig(filePath);
 
-    let filePath = core.getInput('filePath') || defaultPath;
-    let config = await loadConfig(filePath);
 
+        const runTestsInput = core.getInput('runTests');
+        const runTests = runTestsInput.toLowerCase() === 'true' || config.runTests;
 
-    const runTestsInput = core.getInput('runTests');
-    const runTests = runTestsInput.toLowerCase() === 'true' || config.runTests;
+        let versionInput = core.getInput('version');
 
-    let versionInput = core.getInput('version');
+        //let tag = core.getInput('tag') || config.tag;
+        const tag = core.getInput('tag') || config.tag || 'latest';
 
-    //let tag = core.getInput('tag') || config.tag;
-    const tag = core.getInput('tag') || config.tag || 'latest';
+        const version = await getNewVersion(versionInput, 'patch');
 
-    const version = await getNewVersion(versionInput, 'patch');
+        core.info(`Version is: ${version}`);
+        core.info(`Config: ${JSON.stringify(config)}`);
 
-    core.info(`Version is: ${version}`);
-    core.info(`Config: ${JSON.stringify(config)}`);
+        let isLerna = await detectLerna();
 
-    let isLerna = await detectLerna();
+        await installDependency();
 
-    await installDependency();
+        await changeVersion(version, isLerna);
 
-    await changeVersion(version, isLerna);
+        await buildPackages(config);
 
-    await buildPackages(config);
+        await projectTest(runTests);
 
-    await projectTest(runTests);
-
-    await publishPackages2(isLerna, config, tag);
+        await publishPackages2(isLerna, config, tag);
+    }
+    catch (error) {
+        core.error(error)
+    }
 }
 
 run();
