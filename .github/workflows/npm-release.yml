@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        default: ""
+        default: "1.0.4"
         description: "New version (e.g., 1.0.1)"
 # Remake it into a normal action game with version calc, bump and all the crap
 jobs:
@@ -21,12 +21,6 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
-          scope: '@nookyo'
-
-      - name: Authenticate with GitHub Packages
-        run: |
-          echo "@nookyo:registry=https://npm.pkg.github.com/" > ~/.npmrc
-          echo "//npm.pkg.github.com/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
 
       - name: My action use
         uses: ./actions/npm-manager
