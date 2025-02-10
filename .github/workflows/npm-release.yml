@@ -23,10 +23,15 @@ jobs:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
 
+      - name: Authenticate with GitHub Packages
+        run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
+
       - name: My action use
         uses: ./actions/npm-manager
+        with:
+          version: ${{ inputs.version }}
         env:
-           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+           NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
 
 
