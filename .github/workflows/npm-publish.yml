@@ -47,6 +47,11 @@ jobs:
           node-version: ${{ github.event.inputs.node-version }}
           registry-url: ${{ github.event.inputs.registry-url }}
 
+
+      - name: Configure npm authentication
+        run: |
+           echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+
       - name: Install dependencies
         run: npm ci --legacy-peer-deps
 
@@ -107,9 +112,9 @@ jobs:
         with:
           branch_name: 'main'
 
-      - name: Configure npm authentication
-        run: |
-          echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
+      # - name: Configure npm authentication
+      #   run: |
+      #     echo "//npm.pkg.github.com/:_authToken=${NODE_AUTH_TOKEN}" >> ~/.npmrc
 
       - name: Publish Package
         run: |
