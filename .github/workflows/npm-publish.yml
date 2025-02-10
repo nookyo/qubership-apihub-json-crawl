@@ -38,8 +38,8 @@ jobs:
         uses: actions/checkout@v4
 
 
-      - name: Drop NPM cache
-        run: npm cache clean --force
+      # - name: Drop NPM cache
+      #   run: npm cache clean --force
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
