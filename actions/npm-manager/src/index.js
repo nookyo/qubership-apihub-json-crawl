@@ -189,7 +189,6 @@ async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit cha
         const userName = config?.user?.name || 'qubership-action[bot]';
         const userEmail = config?.user?.email || 'qubership-action[bot]@qubership.com';
 
-        // Настраиваем git для использования указанных имени и email.
         await runCommand('git', ['config', 'user.name', userName]);
         await runCommand('git', ['config', 'user.email', userEmail]);
 
