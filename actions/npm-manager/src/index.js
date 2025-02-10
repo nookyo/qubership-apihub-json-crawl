@@ -105,6 +105,38 @@ async function getNewVersion(version, releaseType) {
     }
 }
 
+async function getNewVersion(version, releaseType) {
+
+    if (!version || version.trim() === '') {
+        try {
+            const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
+            const currentVersion = packageJson.version;
+
+            if (!validateVersion(currentVersion)) {
+                core.setFailed(`Version cant validate. Current value: ${currentVersion}`)
+                throw new Error(`Version cant validate. Current value: ${currentVersion}`)
+            }
+
+            core.warning('Version not set. Try to auto increment version');
+            const newVersion = semver.inc(currentVersion, releaseType);
+            return newVersion;
+        }
+        catch (error) {
+            core.error(`Error read ./package.json  ${error}`);
+            throw error;
+        }
+    }
+    else {
+        if (!validateVersion(version)) {
+            core.setFailed(`Version cant validate. Current value: ${version}`)
+            throw new Error(`Version cant validate. Current value: ${version}`)
+        }
+        core.warning(`Use provided version ${version}`)
+        return version;
+    }
+}
+
+
 
 
 
@@ -203,7 +235,8 @@ async function installDependency() {
 
 async function buildPackages(config) {
     core.info('Building project');
-    core.info(`Show config: ${config}`)
+    core.info(`Show config: ${JSON.stringify(config)}`)
+
     if (config.build?.command && config.build?.args) {
         await runCommand(config.build.command, config.build.args);
     } else {

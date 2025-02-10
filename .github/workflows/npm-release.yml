@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        default: "1.0.1"
+        default: "1.0.2"
         description: "New version (e.g., 1.0.1)"
         required: true
 # Remake it into a normal action game with version calc, bump and all the crap
@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
+          scope: 'nookoy'
 
       - name: Authenticate with GitHub Packages
         run: echo "//npm.pkg.github.com/:_authToken=${{ secrets.NODE_AUTH_TOKEN }}" > ~/.npmrc
