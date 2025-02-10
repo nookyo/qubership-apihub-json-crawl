@@ -15,6 +15,7 @@
     "child_process": "^1.0.2",
     "fs": "^0.0.1-security",
     "js-yaml": "^4.1.0",
+    "lodash.merge": "^4.6.2",
     "semver": "^7.7.1",
     "util": "^0.12.5"
   }

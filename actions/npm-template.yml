@@ -1,6 +1,18 @@
-version: "3.0.0"
-debug: true
-tag: latest
+build:
+  command: npm
+  args:
+    - run
+    - build
+    - --if-present
+
+publish:
+  command: npm
+  args:
+    - publish
+    - --tag
+    - '${tag}'
 hooks:
-  preDeploy: "echo 'Running pre-deploy hook'"
-  postDeploy: "echo 'Running post-deploy hook'"
+  preBuild: "echo Running pre-build hook"
+  postBuild: "echo Running post-build hook"
+  preDeploy: "echo Running pre-deploy hook"
+  postDeploy: "echo Running post-deploy hook"
