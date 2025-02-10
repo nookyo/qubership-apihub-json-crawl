@@ -25,6 +25,8 @@ jobs:
 
       - name: My action use
         uses: ./actions/npm-manager
+        env:
+           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
 
