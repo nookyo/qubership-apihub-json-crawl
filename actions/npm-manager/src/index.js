@@ -277,7 +277,7 @@ async function run() {
 
         await projectTest(runTests);
 
-        await commitAndPush(config);
+        // await commitAndPush(config);
 
         await publishPackages2(isLerna, config, tag);
     }
