@@ -126,3 +126,11 @@ jobs:
             echo "Publishing with npm..."
             npm publish --tag ${{ github.event.inputs.dist-tag }}
           fi
+
+
+      - name: Associate Package with Repository
+        run: |
+            PACKAGE_NAME=$(jq -r '.name' package.json)
+            gh api -X POST /user/packages/container/$PACKAGE_NAME/versions/${{ steps.get_version.outputs.package_version }}/repositories/${{ github.repository }} \
+              -H "Accept: application/vnd.github.v3+json" \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
