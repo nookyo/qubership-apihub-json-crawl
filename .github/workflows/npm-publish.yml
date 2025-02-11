@@ -92,8 +92,10 @@ jobs:
               VERSION=$(lerna list --json | jq -r '.[0].version')
             else
               VERSION=$(jq -r '.version' package.json)
+              PACKAGE_NAME=$(jq -r '.name' package.json)
             fi
             echo "package_version=$VERSION" >> $GITHUB_OUTPUT
+            echo "package_name=$PACKAGE_NAME" >> $GITHUB_OUTPUT
 
       - name: Build Project
         run: |
@@ -130,10 +132,11 @@ jobs:
 
       - name: Associate Package with Repository
         run: |
-            echo "Package name: $PACKAGE_NAME"
+            echo "Package name: ${{ steps.get_version.outputs.package_name }}"
             echo "Version: ${{ steps.get_version.outputs.package_version }}"
-            PACKAGE_NAME=$(lerna list --json | jq -r '.[0].version')
-            gh api -X PUT /user/packages/npm/$PACKAGE_NAME/versions/${{ steps.get_version.outputs.package_version }}/repositories/${{ github.repository }} \
+            echo "Repository: ${{ github.repository }}"
+
+            gh api -X PUT /user/packages/npm/${{ steps.get_version.outputs.package_name }}/versions/${{ steps.get_version.outputs.package_version }}/repositories/${{ github.repository }} \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
         env:
