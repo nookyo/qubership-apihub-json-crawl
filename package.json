@@ -1,6 +1,10 @@
 {
   "name": "@nookyo/qubership-apihub-json-crawl",
   "version": "1.0.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/nookyo/qubership-apihub-json-crawl.git"
+  },
   "description": "Async and sync crawler for json object",
   "module": "./dist/index.es.js",
   "main": "./dist/index.cjs.js",
