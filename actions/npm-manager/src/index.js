@@ -137,9 +137,6 @@ async function publishPackages2(isLerna, config, tag) {
     await runCommand(command, args);
 }
 
-
-
-
 async function changeVersion(version, isLerna) {
     core.warning('Changing version');
 
@@ -229,6 +226,7 @@ async function projectTest(runTests) {
         await runCommand('npm', ['run', 'test', '--if-present']);
     }
 }
+
 
 async function run() {
     try {
