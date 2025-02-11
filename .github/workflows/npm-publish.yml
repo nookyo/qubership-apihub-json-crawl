@@ -135,8 +135,14 @@ jobs:
             echo "Package name: ${{ steps.get_version.outputs.package_name }}"
             echo "Version: ${{ steps.get_version.outputs.package_version }}"
             echo "Repository: ${{ github.repository }}"
+            PACKAGE_NAME=$(jq -r '.name' package.json)
 
-            gh api -X PUT /user/packages/npm/${{ steps.get_version.outputs.package_name }}/versions/${{ steps.get_version.outputs.package_version }}/repositories/${{ github.repository }} \
+            PACKAGE_NAME_ENCODED=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$PACKAGE_NAME'''))")
+
+            VERSION_ID=$(gh api /user/packages/npm/$PACKAGE_NAME_ENCODED/versions --jq '.[] | select(.name=="1.0.4") | .id')
+            echo "Version ID: $VERSION_ID"
+
+            gh api -X PUT /user/packages/npm/${{ steps.get_version.outputs.package_name }}/versions/$VERSION_ID/repositories/${{ github.repository }} \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
         env:
