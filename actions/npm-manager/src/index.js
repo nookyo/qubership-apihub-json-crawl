@@ -178,7 +178,6 @@ async function changeVersion(version, isLerna) {
     }
     else {
         await runCommand('npm', ['version', version, '--no-git-tag-version']);
-        await runCommand('npm', ['version', version, '--no-git-tag-version']);
     }
 }
 
