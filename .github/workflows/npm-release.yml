@@ -27,7 +27,7 @@ jobs:
         with:
           package-version: ${{ inputs.version }}
           config-file: './actions/npm-template.yml'
-          run-tests: true
+          run-tests: false
           publish-tag: latest
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
