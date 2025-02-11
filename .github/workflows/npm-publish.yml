@@ -130,8 +130,10 @@ jobs:
 
       - name: Associate Package with Repository
         run: |
+            echo "Package name: $PACKAGE_NAME"
+            echo "Version: ${{ steps.get_version.outputs.package_version }}"
             PACKAGE_NAME=$(jq -r '.name' package.json)
-            gh api -X PUT /user/packages/npm/$PACKAGE_NAME/versions/${{ steps.get_version.outputs.version }}/repositories/${{ github.repository }} \
+            gh api -X PUT /user/packages/npm/$PACKAGE_NAME/versions/${{ steps.get_version.outputs.package_version }}/repositories/${{ github.repository }} \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
         env:
