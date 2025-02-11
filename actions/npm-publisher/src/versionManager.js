@@ -5,6 +5,9 @@ const CmdManager = require('./cmdManager');
 
 class VersionManager {
 
+    constructor(){
+        this.cmdManager = new CmdManager();
+    }
     async getNewVersion(version, releaseType) {
         core.warning('Determining new version...');
         let packageJson;
@@ -43,7 +46,7 @@ class VersionManager {
 
         // await NpmPublisher.runCommand(command, args);
 
-        await CmdManager.runCommand(command, args);
+        await this.cmdManager.runCommand(command, args);
         core.info(`Version updated: ${version.currentVersion} -> ${version.newVersion}`);
     }
 }
