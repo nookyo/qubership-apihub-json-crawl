@@ -58,7 +58,13 @@ class NpmPublisher {
             args = ['publish', '--tag', tag];
         }
 
-        await this.cmdManager.runCommand(command, args);
+        try {
+            await this.cmdManager.runCommand(command, args);
+        }
+        catch (error) {
+            core.setFailed(error);
+            throw error
+        }
     }
 
     async commitAndPush(commitMessage = 'chore[skip ci]: commit changes', commit = false) {
