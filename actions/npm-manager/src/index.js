@@ -6,7 +6,7 @@ const execSync = require('child_process').execSync;
 const semver = require('semver')
 const merge = require('lodash.merge');
 
-const defaultPath = './npm-template.yml';
+const defaultPath = './.github/npm-template.yml';
 
 let configDefault = {
     runTests: false,

@@ -25,7 +25,10 @@ jobs:
       - name: My action use
         uses: ./actions/npm-manager
         with:
-          version: ${{ inputs.version }}
+          package-version: ${{ inputs.version }}
+          config-file: './actions/npm-template.yml'
+          run-tests: true
+          publish-tag: latest
         env:
            NODE_AUTH_TOKEN: ${{ secrets.NODE_AUTH_TOKEN }}
 
