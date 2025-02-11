@@ -92,7 +92,7 @@ async function getNewVersion(version, releaseType, skipIncrement = false) {
 
     if (version || version.trim()) {
         core.warning(`Use provided version ${version}`)
-        return { currentVersion, version };
+        return { currentVersion, newVersion: version };
     }
 
     core.info('Version not set. Try to auto increment version');
