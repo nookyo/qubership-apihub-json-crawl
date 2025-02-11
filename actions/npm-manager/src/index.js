@@ -145,7 +145,7 @@ async function changeVersion(version, isLerna) {
         const args = [
             'lerna',
             'version',
-            version,
+            version.newVersion,
             '--yes',
             '--no-git-tag-version',
             '--no-push'
@@ -153,10 +153,10 @@ async function changeVersion(version, isLerna) {
         await runCommand('npx', args);
     }
     else {
-        await runCommand('npm', ['version', version, '--no-git-tag-version']);
+        await runCommand('npm', ['version', version.newVersion, '--no-git-tag-version']);
     }
 
-    core.warning(`Version changed ${version} -> ${version}`);
+    core.warning(`Version changed ${version.currentVersion} -> ${version.newVersion}`);
 }
 
 
@@ -228,48 +228,6 @@ async function projectTest(runTests) {
         await runCommand('npm', ['run', 'test', '--if-present']);
     }
 }
-
-
-
-
-
-async function oldRun() {
-    try {
-        let filePath = core.getInput('filePath') || defaultPath;
-        let config = await loadConfig(filePath);
-
-
-        const runTestsInput = core.getInput('runTests');
-        const runTests = runTestsInput.toLowerCase() === 'true' || config.runTests;
-
-        let versionInput = core.getInput('version');
-        let releaseType = core.getInput('releaseType') || 'patch'
-        let tag = core.getInput('tag') || config.tag || 'latest';
-
-        const version = await getNewVersion(versionInput, releaseType);
-
-        core.info(`Version is: ${version}`);
-        core.info(`Config: ${JSON.stringify(config)}`);
-
-        let isLerna = await detectLerna();
-
-        await installDependency(config);
-
-        await changeVersion(version, isLerna);
-
-        await buildPackages(config);
-
-        await projectTest(runTests);
-
-        await commitAndPush(config);
-
-        await publishPackages2(isLerna, config, tag);
-    }
-    catch (error) {
-        core.error(error)
-    }
-}
-
 
 async function run() {
     try {
