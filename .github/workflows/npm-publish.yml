@@ -134,3 +134,5 @@ jobs:
             gh api -X POST /user/packages/container/$PACKAGE_NAME/versions/${{ steps.get_version.outputs.version }}/repositories/${{ github.repository }} \
               -H "Accept: application/vnd.github.v3+json" \
               -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
