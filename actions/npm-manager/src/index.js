@@ -6,7 +6,7 @@ const execSync = require('child_process').execSync;
 const semver = require('semver')
 const merge = require('lodash.merge');
 
-const defaultPath = './actions/npm-template.yml';
+const defaultPath = './.github/npm-template.yml';
 
 let configDefault = {
     runTests: false,
@@ -72,37 +72,38 @@ function validateVersion(version) {
 
 
 
-async function getNewVersion(version, releaseType) {
+async function getNewVersion(version, releaseType, skipIncrement = false) {
 
-    if (!version || version.trim() === '') {
-        try {
+    core.warning('Calculation version');
 
-            const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
-            const currentVersion = packageJson.version;
-
-            // if(semver.valid(currentVersion))
-            if (!validateVersion(currentVersion)) {
-                core.setFailed(`Version cant validate. Current value: ${currentVersion}`)
-                throw new Error(`Version cant validate. Current value: ${currentVersion}`)
-            }
-
-            core.warning('Version not set. Try to auto increment version');
-            const newVersion = semver.inc(currentVersion, releaseType);
-            return newVersion;
-        }
-        catch (error) {
-            core.error(`Error read ./package.json  ${error}`);
-            throw error
-        }
+    try {
+        const data = await fs.promises.readFile('./package.json', 'utf-8');
+        const packageJson = JSON.parse(fs.readFileSync('./package.json', 'utf-8'))
     }
-    else {
-        if (!validateVersion(version)) {
-            core.setFailed(`Version cant validate. Current value: ${version}`)
-            throw new Error(`Version cant validate. Current value: ${version}`)
-        }
+    catch (error) {
+        core.error(`Error reading ./package.json: ${error}`);
+        throw error;
+    }
+
+    const currentVersion = packageJson.version;
+
+    if (version || version.trim()) {
         core.warning(`Use provided version ${version}`)
-        return version;
+        return { currentVersion, version };
     }
+
+    let newVersion;
+    core.info('Version not set. Try to auto increment version');
+    newVersion = semver.inc(currentVersion, releaseType);
+
+    if (!newVersion) {
+        const errorMessage = `Failed to increment version from ${currentVersion} using release type ${releaseType}`;
+        core.error(errorMessage);
+        throw new Error(errorMessage);
+    }
+
+    return { currentVersion, newVersion }
+
 }
 
 async function publishPackages2(isLerna, config, tag) {
@@ -154,11 +155,13 @@ async function changeVersion(version, isLerna) {
     else {
         await runCommand('npm', ['version', version, '--no-git-tag-version']);
     }
+
+    core.warning(`Version changed ${version} -> ${version}`);
 }
 
 
-async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit changes') {
-    core.warning('Commit and Push to origin HEAD')
+async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit changes', commit = false) {
+    core.warning('Commit and Push')
     try {
 
         const userName = config?.user?.name || 'qubership-action[bot]';
@@ -169,12 +172,13 @@ async function commitAndPush(config, commitMessage = 'chore[skip ci]: commit cha
 
         core.info(`Git config set: user.name=${userName}, user.email=${userEmail}`);
 
-        //await runCommand('git', ['rm', '-r', '--cached', 'node_modules']);
-
         await runCommand('git', ['add', '.']);
         await runCommand('git', ['reset', 'node_modules']);
         await runCommand('git', ['commit', '-m', commitMessage]);
-        await runCommand('git', ['push', 'origin', 'HEAD']);
+
+        if (commit) {
+            await runCommand('git', ['push', 'origin', 'HEAD']);
+        }
 
     } catch (error) {
 
@@ -196,9 +200,13 @@ async function detectLerna() {
 }
 
 
-async function installDependency() {
+async function installDependency(config) {
     core.warning('Installing dependencies');
-    await runCommand('npm', ['ci', '--legacy-peer-deps']);
+    if (config.ci?.command && config.ci?.args)
+        await runCommand(config.ci.command, config.ci.args)
+    else {
+        await runCommand('npm', ['ci', '--legacy-peer-deps']);
+    }
 }
 
 
@@ -225,7 +233,7 @@ async function projectTest(runTests) {
 
 
 
-async function run() {
+async function oldRun() {
     try {
         let filePath = core.getInput('filePath') || defaultPath;
         let config = await loadConfig(filePath);
@@ -235,18 +243,17 @@ async function run() {
         const runTests = runTestsInput.toLowerCase() === 'true' || config.runTests;
 
         let versionInput = core.getInput('version');
+        let releaseType = core.getInput('releaseType') || 'patch'
+        let tag = core.getInput('tag') || config.tag || 'latest';
 
-        //let tag = core.getInput('tag') || config.tag;
-        const tag = core.getInput('tag') || config.tag || 'latest';
-
-        const version = await getNewVersion(versionInput, 'patch');
+        const version = await getNewVersion(versionInput, releaseType);
 
         core.info(`Version is: ${version}`);
         core.info(`Config: ${JSON.stringify(config)}`);
 
         let isLerna = await detectLerna();
 
-        await installDependency();
+        await installDependency(config);
 
         await changeVersion(version, isLerna);
 
@@ -260,6 +267,42 @@ async function run() {
     }
     catch (error) {
         core.error(error)
+    }
+}
+
+
+
+
+async function run() {
+    try {
+
+        let configFile = core.getInput('config-file') || defaultPath;
+        let config = await loadConfig(configFile);
+
+        const runTestsInput = core.getInput('run-tests');
+        const runTests = runTestsInput.toLowerCase() === 'true' || config.runTests;
+
+        let packageVersion = core.getInput('package-version');
+        let releaseType = core.getInput('release-type') || 'patch';
+
+        let publishTag = core.getInput('publish-tag') || config.tag || 'latest';
+
+        const version = await getNewVersion(packageVersion, releaseType);
+
+        core.info(`Version is: ${JSON.stringify(version)}`);
+        core.info(`Config: ${JSON.stringify(config)}`);
+
+        let isLerna = await detectLerna();
+
+        await installDependency(config);
+        await changeVersion(version, isLerna);
+        await buildPackages(config);
+        await projectTest(runTests);
+        await commitAndPush(config);
+        await publishPackages2(isLerna, config, publishTag);
+    }
+    catch (error) {
+        core.error(error);
     }
 }
 

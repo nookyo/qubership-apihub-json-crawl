@@ -11,6 +11,13 @@ publish:
     - publish
     - --tag
     - '${tag}'
+
+ci:
+  command: 'npm'
+  args:
+    - ci
+    - --legacy-peer-deps
+
 hooks:
   preBuild: "echo Running pre-build hook"
   postBuild: "echo Running post-build hook"
