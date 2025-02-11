@@ -128,6 +128,6 @@ jobs:
             echo "Publishing with npm..."
             npm publish --tag ${{ github.event.inputs.dist-tag }}
           fi
-      - name: Set latest dist-tag
-        run: |
-          npm dist-tag add @nookyo/qubership-apihub-json-crawl@${{ steps.get_version.outputs.package_version }} latest
+      # - name: Set latest dist-tag
+      #   run: |
+      #     npm dist-tag add @nookyo/qubership-apihub-json-crawl@${{ steps.get_version.outputs.package_version }} latest
