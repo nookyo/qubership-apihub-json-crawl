@@ -60,7 +60,7 @@ jobs:
           registry-url: 'https://npm.pkg.github.com'
 
       - name: Run npm Publisher Action
-        uses: your-org/npm-publisher-action@v1
+        uses: your-org/npm-publisher
         with:
           config-file: .github/npm-template.yml
           run-tests: 'true'
