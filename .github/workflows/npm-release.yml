@@ -23,7 +23,7 @@ jobs:
           registry-url: "https://npm.pkg.github.com"
 
       - name: My action use
-        uses: ./actions/npm-manager
+        uses: ./actions/npm-publisher
         with:
           package-version: ${{ inputs.version }}
           config-file: './actions/npm-template.yml'
