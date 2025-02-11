@@ -105,31 +105,6 @@ async function getNewVersion(version, releaseType) {
     }
 }
 
-
-// async function publishPackages(isLerna, tagName) {
-//     core.warning('Publishing packages');
-
-//     //const tagName = process.env.TAG_NAME || 'latest';
-
-//     if (isLerna) {
-//         await runCommand('npx', [
-//             'lerna',
-//             'publish',
-//             'from-package',
-//             '--yes',
-//             '--no-push',
-//             '--no-git-reset',
-//             '--no-git-tag-version',
-//             '--dist-tag', tagName
-//         ]);
-//     }
-//     else {
-//         await runCommand('npm', ['publish', '--tag', tagName]);
-//     }
-//     return;
-//}
-
-
 async function publishPackages2(isLerna, config, tag) {
     core.warning('Publishing packages');
     let command, args;
@@ -228,7 +203,7 @@ async function installDependency() {
 
 
 async function buildPackages(config) {
-    core.info('Building project');
+    core.warning('Building project');
     core.info(`Show config: ${JSON.stringify(config)}`)
 
     if (config.build?.command && config.build?.args) {
