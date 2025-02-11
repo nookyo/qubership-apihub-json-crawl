@@ -75,10 +75,10 @@ function validateVersion(version) {
 async function getNewVersion(version, releaseType, skipIncrement = false) {
 
     core.warning('Try to get new version');
-
+    let packageJson;
     try {
         const data = await fs.promises.readFile('./package.json', 'utf-8');
-        const packageJson = JSON.parse(data);
+        packageJson = JSON.parse(data);
     }
     catch (error) {
         core.error(`Error reading ./package.json: ${error}`);
