@@ -11,11 +11,8 @@ class CmdManager {
                 NODE_AUTH_TOKEN: process.env.NODE_AUTH_TOKEN || process.env.GITHUB_TOKEN,
             },
         };
-        try {
-            await exec.exec(command, args, options);
-        } catch (error) {
-            throw error;
-        }
+
+        await exec.exec(command, args, options);
     }
 }
 
