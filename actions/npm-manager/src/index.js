@@ -157,8 +157,7 @@ async function changeVersion(version, isLerna) {
     else {
         await runCommand('npm', ['version', version.newVersion, '--no-git-tag-version']);
     }
-
-    core.warning(`Version changed ${version.currentVersion} -> ${version.newVersion}`);
+    core.info(`Version changed ${version.currentVersion} -> ${version.newVersion}`);
 }
 
 
@@ -260,7 +259,8 @@ async function run() {
         await publishPackages2(isLerna, config, publishTag);
     }
     catch (error) {
-        core.error(error);
+        // core.error(error);
+        core.setFailed(error);
     }
 }
 
