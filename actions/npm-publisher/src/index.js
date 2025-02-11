@@ -16,11 +16,11 @@ async function run() {
         const publishTag = core.getInput('publish-tag') || 'latest';
         const releaseType = core.getInput('release-type') || 'patch';
 
-        core.info(`📦 Package Version: ${packageVersion || 'Auto-detect'}`);
-        core.info(`🛠 Config File Path: ${configFilePath}`);
-        core.info(`🧪 Run Tests: ${runTests}`);
-        core.info(`🏷 Publish Tag: ${publishTag}`);
-        core.info(`🔄 Release Type: ${releaseType}`);
+        core.info(`📌 Package Version: ${packageVersion || 'Auto-detect'}`);
+        core.info(`📌 Config File Path: ${configFilePath}`);
+        core.info(`📌 Run Tests: ${runTests}`);
+        core.info(`📌 Publish Tag: ${publishTag}`);
+        core.info(`📌 Release Type: ${releaseType}`);
 
         const configLoader = new ConfigLoader();
         const config = await configLoader.load(configFilePath);

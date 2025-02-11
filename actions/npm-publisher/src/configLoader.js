@@ -24,7 +24,7 @@ class ConfigLoader {
                 core.error(`Error loading config file: ${error}`);
             }
         } else {
-            core.warning(`Config file ${filePath} not found. Using defaults.`);
+            core.warning(`💡 Config file ${filePath} not found. Using defaults.`);
         }
 
         config.version = core.getInput('version') || config.version;

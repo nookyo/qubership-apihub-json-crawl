@@ -9,7 +9,7 @@ class VersionManager {
         this.cmdManager = new CmdManager();
     }
     async getNewVersion(version, releaseType) {
-        core.warning('Determining new version...');
+        core.warning('💡 Determining new version...');
         let packageJson;
 
         try {
@@ -23,7 +23,7 @@ class VersionManager {
         const currentVersion = packageJson.version;
 
         if (version && version.trim()) {
-            core.warning(`Using provided version: ${version}`);
+            core.warning(`💡 Using provided version: ${version}`);
             return { currentVersion, newVersion: version };
         }
 
@@ -38,7 +38,7 @@ class VersionManager {
     }
 
     async changeVersion(version, isLerna) {
-        core.warning('Changing version...');
+        core.warning('💡 Changing version...');
         const command = isLerna ? 'npx' : 'npm';
         const args = isLerna
             ? ['lerna', 'version', version.newVersion, '--yes', '--no-git-tag-version', '--no-push']

@@ -10,14 +10,14 @@ class NpmPublisher {
 
     async detectLerna() {
         if (fs.existsSync('lerna.json')) {
-            core.warning('Detected Lerna project');
+            core.warning('💡 Detected Lerna project');
             return true;
         }
         return false;
     }
 
     async installDependency() {
-        core.warning('Installing dependencies...');
+        core.warning('💡 Installing dependencies...');
         if (this.config.ci?.command && this.config.ci?.args) {
             await this.cmdManager.runCommand(this.config.ci.command, this.config.ci.args);
         } else {
@@ -26,7 +26,7 @@ class NpmPublisher {
     }
 
     async buildPackages() {
-        core.warning('Building project...');
+        core.warning('💡 Building project...');
         if (this.config.build?.command && this.config.build?.args) {
             await this.cmdManager.runCommand(this.config.build.command, this.config.build.args);
         } else {
@@ -35,7 +35,7 @@ class NpmPublisher {
     }
 
     async publishPackages(isLerna, tag) {
-        core.warning('Publishing packages...');
+        core.warning('💡 Publishing packages...');
         let command, args;
 
         if (this.config.publish?.command && this.config.publish?.args) {
@@ -62,7 +62,7 @@ class NpmPublisher {
     }
 
     async commitAndPush(commitMessage = 'chore[skip ci]: commit changes', commit = false) {
-        core.warning('Committing and pushing changes...');
+        core.warning('💡 Committing and pushing changes...');
         try {
             const userName = this.config?.user?.name || 'qubership-action[bot]';
             const userEmail = this.config?.user?.email || 'qubership-action[bot]@qubership.com';
