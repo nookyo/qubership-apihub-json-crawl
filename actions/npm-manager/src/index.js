@@ -75,7 +75,10 @@ function validateVersion(version) {
 async function getNewVersion(version, releaseType, skipIncrement = false) {
 
     core.warning('Try to get new version');
+
     let packageJson;
+    let newVersion;
+
     try {
         const data = await fs.promises.readFile('./package.json', 'utf-8');
         packageJson = JSON.parse(data);
@@ -92,7 +95,6 @@ async function getNewVersion(version, releaseType, skipIncrement = false) {
         return { currentVersion, version };
     }
 
-    let newVersion;
     core.info('Version not set. Try to auto increment version');
     newVersion = semver.inc(currentVersion, releaseType);
 
