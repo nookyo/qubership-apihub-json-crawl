@@ -6,9 +6,8 @@ const CmdManager = require('./cmdManager');
 
 async function run() {
     try {
-        core.info('🔹 Starting NPM Build and Publish Action...');
+        core.info('🔷 Starting NPM Build and Publish Action...');
 
-        // Читаем входные параметры GitHub Actions
         const packageVersion = core.getInput('package-version');
         const configFilePath = core.getInput('config-file') || './.github/npm-template.yml';
         const runTestsInput = core.getInput('run-tests');
