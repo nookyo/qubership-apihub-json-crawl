@@ -22,7 +22,7 @@ on:
         description: "Update dependencies"
         required: false
       dist-tag:
-        default: "next"
+        default: "latest"
         description: "NPM dist-tag"
         required: false
 
@@ -128,22 +128,6 @@ jobs:
             echo "Publishing with npm..."
             npm publish --tag ${{ github.event.inputs.dist-tag }}
           fi
-
-
-      - name: Associate Package with Repository
+      - name: Set latest dist-tag
         run: |
-            echo "Package name: ${{ steps.get_version.outputs.package_name }}"
-            echo "Version: ${{ steps.get_version.outputs.package_version }}"
-            echo "Repository: ${{ github.repository }}"
-            PACKAGE_NAME=$(jq -r '.name' package.json)
-
-            PACKAGE_NAME_ENCODED=$(python3 -c "import urllib.parse; print(urllib.parse.quote('''$PACKAGE_NAME'''))")
-
-            VERSION_ID=$(gh api /user/packages/npm/$PACKAGE_NAME_ENCODED/versions --jq '.[] | select(.name=="${{ steps.get_version.outputs.package_version }}") | .id')
-            echo "Version ID: $VERSION_ID"
-
-            gh api -X PUT /user/packages/npm/${{ steps.get_version.outputs.package_name }}/versions/$VERSION_ID/repositories/${{ github.repository }} \
-              -H "Accept: application/vnd.github.v3+json" \
-              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          npm dist-tag add @nookyo/qubership-apihub-json-crawl@${{ steps.get_version.outputs.package_version }} latest
