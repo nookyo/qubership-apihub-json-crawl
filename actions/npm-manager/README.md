@@ -99,19 +99,22 @@ All commands (installing dependencies, building, testing, publishing) can be ove
 Example:
 ```yaml
 ci:
-  command: yarn
+  command: npm
   args:
-    - install
+    - ci
+    - --legacy-peer-deps
 
 build:
-  command: yarn
+  command: npm
   args:
+    - run
     - build
+    - --if-present
 
 publish:
-  command: yarn
+  command: npm
   args:
     - publish
     - --tag
-    - ${tag}
+    - '${tag}'
 ```
