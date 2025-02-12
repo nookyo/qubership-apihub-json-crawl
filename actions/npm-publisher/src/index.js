@@ -21,8 +21,8 @@ async function run() {
         core.info(`📌 Publish Tag: ${publishTag}`);
         core.info(`📌 Release Type: ${releaseType}`);
 
-        core.info(`📌git ref: ${process.env.GITHUB_REF}`);
-        core.info(`📌git ref name: ${process.env.GITHUB_REF_NAME}`);
+        core.info(`📌 Git ref: ${process.env.GITHUB_REF}`);
+        core.info(`📌 Git ref name: ${process.env.GITHUB_REF_NAME}`);
 
 
         const configLoader = new ConfigLoader();
