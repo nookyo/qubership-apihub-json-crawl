@@ -41,7 +41,7 @@ async function updateDependency() {
 
 async function runHook(hookName, hooks) {
     if (hooks && hooks[hookName]) {
-        core.info(`Запуск хука ${hookName}: ${hooks[hookName]}`);
+        core.info(`Running hook ${hookName}: ${hooks[hookName]}`);
         await runCommand("sh", ["-c", hooks[hookName]]);
     }
 }
