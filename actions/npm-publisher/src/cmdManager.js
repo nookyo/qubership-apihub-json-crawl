@@ -13,6 +13,13 @@ class CmdManager {
         };
         await exec.exec(command, args, options);
     }
+
+    async runHook(hookName, hooks) {
+        if (hooks && hooks[hookName]) {
+            core.info(`Running hook: ${hookName}: ${hooks[hookName]}`);
+            await runCommand("sh", ["-c", hooks[hookName]]);
+        }
+    }
 }
 
 module.exports = CmdManager
