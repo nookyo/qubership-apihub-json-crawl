@@ -49,6 +49,11 @@ class VersionManager {
         await this.cmdManager.runCommand(command, args);
         core.info(`Version updated: ${version.currentVersion} -> ${version.newVersion}`);
     }
+    async devMode(branch){
+        // if()
+        // core.warning('💡 Running in dev mode...');
+        // const command = 'npm';
+    }
 }
 
 module.exports = VersionManager;
