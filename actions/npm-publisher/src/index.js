@@ -21,13 +21,18 @@ async function run() {
         core.info(`📌 Publish Tag: ${publishTag}`);
         core.info(`📌 Release Type: ${releaseType}`);
 
-        core.info(`📌git ref:  + ${process.env.GITHUB_REF}`);
+        core.info(`📌git ref: ${process.env.GITHUB_REF}`);
+        core.info(`📌git ref name: ${process.env.GITHUB_REF_NAME}`);
+
 
         const configLoader = new ConfigLoader();
         const config = await configLoader.load(configFilePath);
         const cmdManager = new CmdManager();
         const versionManager = new VersionManager(cmdManager);
         const npmPublisher = new NpmPublisher(config, cmdManager);
+
+
+        versionManager.devMode(process.env.GITHUB_REF);
 
         const isLerna = await npmPublisher.detectLerna();
 

@@ -50,6 +50,7 @@ class VersionManager {
         core.info(`Version updated: ${version.currentVersion} -> ${version.newVersion}`);
     }
     async devMode(branch){
+         core.info(`📌git ref: ${branch}`);
         // if()
         // core.warning('💡 Running in dev mode...');
         // const command = 'npm';
