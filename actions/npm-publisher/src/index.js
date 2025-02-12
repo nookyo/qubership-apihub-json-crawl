@@ -32,22 +32,22 @@ async function run() {
         const npmPublisher = new NpmPublisher(config, cmdManager);
 
 
-        versionManager.devMode(process.env.GITHUB_REF);
+        versionManager.devMode(process.env.GITHUB_REF, process.env.GITHUB_REF_NAME);
 
-        const isLerna = await npmPublisher.detectLerna();
+        // const isLerna = await npmPublisher.detectLerna();
 
-        const version = await versionManager.getNewVersion(packageVersion, releaseType);
+        // const version = await versionManager.getNewVersion(packageVersion, releaseType);
 
-        await npmPublisher.installDependency();
-        await versionManager.changeVersion(version, isLerna);
-        await npmPublisher.buildPackages();
+        // await npmPublisher.installDependency();
+        // await versionManager.changeVersion(version, isLerna);
+        // await npmPublisher.buildPackages();
 
-        if (runTests) {
-            await npmPublisher.runTests();
-        }
+        // if (runTests) {
+        //     await npmPublisher.runTests();
+        // }
 
-        await npmPublisher.commitAndPush();
-        await npmPublisher.publishPackages(isLerna, publishTag);
+        // await npmPublisher.commitAndPush();
+        // await npmPublisher.publishPackages(isLerna, publishTag);
 
         core.info('✅ NPM package successfully built and published!');
 

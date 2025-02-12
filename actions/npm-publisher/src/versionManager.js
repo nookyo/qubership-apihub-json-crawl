@@ -49,8 +49,10 @@ class VersionManager {
         await this.cmdManager.runCommand(command, args);
         core.info(`Version updated: ${version.currentVersion} -> ${version.newVersion}`);
     }
-    async devMode(branch){
-         core.info(`📌git ref: ${branch}`);
+    async devMode(ref, refName){
+         core.info(`📌 Git ref: ${ref}`);G
+         core.info(`📌 Git ref name: ${refName}`);
+
         // if()
         // core.warning('💡 Running in dev mode...');
         // const command = 'npm';
